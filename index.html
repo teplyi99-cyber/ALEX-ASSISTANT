@@ -184,9 +184,7 @@
         // Показываем индикатор "печатает..." (опционально)
         
         try {
-            const response = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const respons
                 body: JSON.stringify({ message: text, user: 'alexander' })
             });
 
