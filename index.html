@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -5,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ассистент Александра</title>
     <style>
-        /* Скандинавский стиль: минимализм, светлые тона, четкость */
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             background-color: #f4f6f8;
@@ -47,7 +47,7 @@
             color: #444;
         }
         .user-message {
-            background-color: #3498db; /* Спокойный синий */
+            background-color: #3498db;
             color: white;
             align-self: flex-end;
             border: none;
@@ -148,17 +148,13 @@
 </div>
 
 <script>
-    // --- НАСТРОЙКИ ---
-    // Сюда вы вставите адрес вашего Webhook из n8n позже
-    const WEBHOOK_URL = 'https://alex-resorius.amvera.io/webhook/Chat'; 
-    // -----------------
+    const WEBHOOK_URL = 'https://alex-resorius.amvera.io/webhook/Chat';
 
     const chatContainer = document.getElementById('chat-container');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
     const micBtn = document.getElementById('mic-btn');
 
-    // Функция добавления сообщения на экран
     function addMessage(text, sender) {
         const div = document.createElement('div');
         div.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
@@ -167,13 +163,11 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Отправка быстрой команды
     function sendQuick(text) {
         userInput.value = text;
         sendMessage();
     }
 
-    // Основная логика отправки
     async function sendMessage() {
         const text = userInput.value.trim();
         if (!text) return;
@@ -181,17 +175,16 @@
         addMessage(text, 'user');
         userInput.value = '';
 
-        // Показываем индикатор "печатает..." (опционально)
-        
         try {
-            const respons
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: text, user: 'alexander' })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                // Ожидаем ответ от n8n в поле 'output' или 'text'
-                addMessage(data.output || data.text || "Получил данные.", 'bot');
+                addMessage(data.output || data.text || 'Получил данные.', 'bot');
             } else {
                 addMessage('Ошибка соединения с сервером.', 'bot');
             }
@@ -201,7 +194,6 @@
         }
     }
 
-    // Обработчики кнопок
     sendBtn.addEventListener('click', sendMessage);
     userInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
@@ -226,35 +218,28 @@
 
         recognition.onstart = () => {
             micBtn.classList.add('listening');
-            userInput.placeholder = "Слушаю...";
+            userInput.placeholder = 'Слушаю...';
         };
 
         recognition.onend = () => {
             micBtn.classList.remove('listening');
-            userInput.placeholder = "Введите сообщение или нажмите микрофон...";
+            userInput.placeholder = 'Введите сообщение или нажмите микрофон...';
         };
 
         recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            userInput.value = transcript;
-            // Можно отправлять сразу, если хотите:
-            // sendMessage(); 
+            userInput.value = event.results[0][0].transcript;
         };
     } else {
-        micBtn.style.display = 'none'; // Скрыть, если браузер не поддерживает
-        alert("Ваш браузер не поддерживает голосовой ввод. Используйте Chrome, Safari или Яндекс.");
+        micBtn.style.display = 'none';
     }
 
-    // --- ЗАПРОС УВЕДОМЛЕНИЙ (PUSH) ---
-    // Запросим разрешение при первой загрузке
-    if ("Notification" in window && Notification.permission !== "granted") {
+    if ('Notification' in window && Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
-    
-    // Функция для проверки уведомлений (можно вызвать из n8n позже)
+
     function showNotification(title, body) {
-        if (Notification.permission === "granted") {
-            new Notification(title, { body: body, icon: '' });
+        if (Notification.permission === 'granted') {
+            new Notification(title, { body: body });
         }
     }
 </script>
