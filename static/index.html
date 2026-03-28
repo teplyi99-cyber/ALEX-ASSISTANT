@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROMETHEUS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff6b35;
+            letter-spacing: 2px;
+        }
+        header span {
+            font-size: 0.75rem;
+            color: #555;
+        }
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .msg {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .bot {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            align-self: flex-start;
+            color: #ccc;
+        }
+        .user {
+            background: #ff6b35;
+            color: #fff;
+            align-self: flex-end;
+        }
+        .quick-btns {
+            padding: 10px 20px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            border-top: 1px solid #1a1a1a;
+        }
+        .quick-btn {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #aaa;
+            padding: 7px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .quick-btn:hover { border-color: #ff6b35; color: #ff6b35; }
+        #input-area {
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #1a1a1a;
+        }
+        #msg-input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e0e0e0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        #msg-input:focus { border-color: #ff6b35; }
+        #send-btn {
+            background: #ff6b35;
+            border: none;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        #send-btn:hover { background: #e55a25; }
+        #mic-btn {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #aaa;
+            width: 46px;
+            height: 46px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        #mic-btn.listening { background: #c0392b; color: #fff; border-color: #c0392b; }
+        .typing { color: #555; font-style: italic; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
